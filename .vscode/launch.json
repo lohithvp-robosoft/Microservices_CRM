@@ -1,0 +1,35 @@
+{
+	"configurations": [
+		{
+			"type": "java",
+			"name": "Spring Boot-CsmApplication<csm>",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"mainClass": "com.example.csm.CsmApplication",
+			"projectName": "csm",
+			"args": "",
+			"envFile": "${workspaceFolder}/.env"
+		},
+		{
+			"type": "java",
+			"name": "Spring Boot-CmsApplication<cms>",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"mainClass": "com.example.cms.CmsApplication",
+			"projectName": "cms",
+			"args": "",
+			"envFile": "${workspaceFolder}/.env",
+			"vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=57869 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=cms"
+		},
+		{
+			"type": "java",
+			"name": "Spring Boot-CrmApplication<CRM>",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"mainClass": "com.example.CRM.CrmApplication",
+			"projectName": "CRM",
+			"args": "",
+			"envFile": "${workspaceFolder}/.env"
+		}
+	]
+}
