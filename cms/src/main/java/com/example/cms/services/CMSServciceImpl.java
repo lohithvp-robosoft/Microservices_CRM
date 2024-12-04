@@ -1,6 +1,8 @@
 package com.example.cms.services;
 
+import com.example.cms.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,14 @@ import com.example.cms.model.CaseManagement;
 import com.example.cms.repository.CaseManagementRepoitory;
 import com.example.cms.utils.ResponseUtil;
 
+import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class CMSServciceImpl implements CMSServcice {
+    @Value("${error.case.notFound}")
+    private String caseNotFoundMessage;
 
     @Autowired
     CaseManagementRepoitory caseManagementRepoitory;
@@ -31,9 +37,9 @@ public class CMSServciceImpl implements CMSServcice {
     }
 
     @Override
-    public ResponseEntity<ResponseBody> editACase(Long customerId, Long caseId, UserRequest userRequest) {
+    public ResponseEntity<ResponseBody> editACase(Long customerId, Long caseId, UserRequest userRequest) throws NotFoundException{
         Optional<CaseManagement> optionalCaseManagement = caseManagementRepoitory.findById(caseId);
-        if (optionalCaseManagement.isPresent()) {
+        if (optionalCaseManagement.isPresent() && Objects.equals(optionalCaseManagement.get().getCustomerId(), customerId)) {
             CaseManagement caseManagement = optionalCaseManagement.get();
             caseManagement.setSubject(userRequest.getSubject());
             caseManagement.setDescription(userRequest.getDescription());
@@ -43,8 +49,27 @@ public class CMSServciceImpl implements CMSServcice {
             caseManagementRepoitory.save(caseManagement);
             return ResponseUtil.successResponse(new ResponseData(ListUtils.createListFromObjects(new ResponseCSM(caseManagement))));
         }
-
-        return null;
+        throw new NotFoundException(String.format(caseNotFoundMessage,caseId));
     }
 
+    @Override
+    public ResponseEntity<ResponseBody> getACaseById(Long customerId, Long caseId) throws NotFoundException{
+        Optional<CaseManagement> optionalCaseManagement = caseManagementRepoitory.findById(caseId);
+
+        if (optionalCaseManagement.isPresent() && Objects.equals(optionalCaseManagement.get().getCustomerId(), customerId)) {
+            return ResponseUtil.successResponse(new ResponseData(ListUtils.createListFromObjects(new ResponseCSM(optionalCaseManagement.get()))));
+        }
+        throw new NotFoundException(String.format(caseNotFoundMessage,caseId));
+    }
+
+    @Override
+    public ResponseEntity<ResponseBody> deleteACase(Long customerId, Long caseId) throws NotFoundException{
+        Optional<CaseManagement> optionalCaseManagement = caseManagementRepoitory.findById(caseId);
+
+        if (optionalCaseManagement.isPresent() && Objects.equals(optionalCaseManagement.get().getCustomerId(), customerId)) {
+            caseManagementRepoitory.delete(optionalCaseManagement.get());
+            return ResponseUtil.successResponse(new ResponseData(ListUtils.createListFromObjects(new ResponseCSM(optionalCaseManagement.get()))));
+        }
+        throw new NotFoundException(String.format(caseNotFoundMessage,caseId));
+    }
 }
