@@ -14,7 +14,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="CRM" options="-parameters" />
+      <module name="CRM" options="-parameters --add-exports jdk.jdeps/com.sun.tools.classfile=ALL-UNNAMED" />
       <module name="cms" options="-parameters" />
     </option>
   </component>
