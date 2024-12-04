@@ -1,5 +1,6 @@
 package com.example.cms.exception;
 
+<<<<<<< HEAD
 import com.example.cms.dto.response.ResponseBody;
 import com.example.cms.utils.ResponseUtil;
 import org.springframework.http.ResponseEntity;
@@ -17,4 +18,7 @@ public class ExceptionHandler {
     public ResponseEntity<ResponseBody> handleNotFoundException(NotFoundException exception) {
         return ResponseUtil.errorResponse(exception.getMessage());
     }
+=======
+public class ExceptionHandler {
+>>>>>>> d9c9d73b6c54175526b062a1c1657ce6416d9130
 }
